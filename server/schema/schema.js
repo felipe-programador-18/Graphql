@@ -65,7 +65,7 @@ const DirectorType = new GraphQLObjectType({
         resolve(parent, args){  
          return _.filter(movies, {directorId:parent.id} )
         }
-       }   
+       }
     })
 })
 
@@ -81,7 +81,7 @@ const rootQuery = new GraphQLObjectType({
       movie: {
         type:MovieType,
         args:{ id: {type:GraphQLID}},
-        resolve(parents, args){
+        resolve(parent, args){
             //get date from database
          console.log(typeof args.id)   
          return  _.find(movies,{id:args.id})
@@ -91,10 +91,26 @@ const rootQuery = new GraphQLObjectType({
     director: {
         type: DirectorType,
         args: {id:{type:GraphQLID}},
-        resolve(params, args){
+        resolve(parent, args){
           return _.find(directors,{id: args.id})   
         }
-      }
+      },
+
+    movies:{
+     type: new GraphQLList(MovieType),
+      resolve (parent, args){
+       return movies;
+      } 
+    },
+
+     directors: {
+        type: new GraphQLList(DirectorType),
+        resolve(parent,args){
+          return directors;
+        }
+    }
+
+
 
     })
 })
